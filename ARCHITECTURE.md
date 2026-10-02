@@ -4,9 +4,9 @@ Draftomatic is a local Python command-line application.
 
 The design is intentionally human-in-the-loop. Draftomatic does not run as a shared bot, silently publish generated content, or replace subject-matter review. It helps a technical writer move from a grounded Jira ticket to a first documentation draft while preserving the writer's identity, judgment, and ability to stop the workflow.
 
-## What the first release does
+## What Draftomatic does
 
-The first release covers five stages:
+The workflow covers five stages:
 
 1. Prepare or create a DOCS Jira ticket with an ordered `Recommended updates` section.
 2. Find related engineering tickets, linked pull requests, and local source repositories.
@@ -97,7 +97,7 @@ This structure adds more small interfaces than a script that calls every service
 
 ## Codex and context design
 
-The planned Codex adapter uses the supported openai-codex Python SDK to connect to the writer's local Codex runtime. Draftomatic does not define a separate shared bot identity or require a separate CODEX_API_KEY. The writer's local Codex account remains the accountable actor.
+The Codex adapter uses the supported openai-codex Python SDK to connect to the writer's local Codex runtime. Draftomatic does not define a separate shared bot identity or require a separate CODEX_API_KEY. Codex runs through the writer's local account, and the writer remains responsible for reviewing the resulting changes.
 
 Codex receives focused context rather than an undifferentiated dump of project data:
 
@@ -107,7 +107,7 @@ Codex receives focused context rather than an undifferentiated dump of project d
 - the current workflow stage and saved state; and
 - the single update or review comment being handled in the current prompt.
 
-This keeps the agent focused and makes each change easier to inspect. A documentation ontology and persona-based audience overlay can provide an additional semantic layer for prompt construction, allowing generated instructions to focus the model on relevant topics, audience needs, tone, and delivery format.
+This keeps the agent focused and makes each change easier to inspect. A documentation ontology and persona-based audience overlay provide an additional semantic layer for prompt construction, allowing generated instructions to focus the model on relevant topics, audience needs, tone, and delivery format.
 
 ## State and persistence
 
@@ -139,15 +139,15 @@ The design supports testing at several levels:
 2. Action tests use fakes to verify protocol calls, identity checks, retries, and event recording.
 3. Adapter contract tests verify mappings and error handling without live writes.
 4. SQLite tests verify migrations, transactions, version checks, archive behavior, and workspace leases.
-5. An offline acceptance test exercises the first five stages with fake Jira, GitHub, Codex, Git, skills, and repositories.
+5. An offline acceptance test exercises all five workflow stages with fake Jira, GitHub, Codex, Git, skills, and repositories.
 
-The acceptance path proves that a ticket can be prepared, grounded in engineering evidence, implemented one update at a time, opened as a draft pull request, paused for review, and resumed with the same branch and Codex thread.
+Using fake external systems, the acceptance test verifies workflow coordination across ticket preparation, evidence gathering, incremental implementation, draft pull request creation, the review pause, and resumption with the saved branch and Codex thread.
 
-## Current status
+## Public project context
 
-This repository contains the public architecture and workflow design for Draftomatic. The current implementation increment is intentionally scaffold-first: it defines package boundaries, typed interfaces, documented stubs, and test paths before external behavior is enabled. The first working release is stages one through five. Later work includes source-verification comments, adversarial review, copy editing, final review gates, worktree support, and automatic Jira queue monitoring.
+The original Draftomatic implementation lives in an internal GitHub repository that is not publicly accessible. This public repository documents a workflow I developed independently. The material shared here contains no confidential information belonging to my employer and describes a general, publicly shareable approach to human-in-the-loop documentation automation.
 
-The architecture is designed to make those increments independently testable while keeping the human-review boundary intact.
+
 
 ## Further reading
 
